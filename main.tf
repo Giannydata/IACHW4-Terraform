@@ -28,6 +28,10 @@ resource "aws_vpc" "DBvpc" {
 
   cidr_block = "10.0.0.0/16"
 
+  tags = {
+    name = "DBVPC"
+  }
+
 }
 
 resource "aws_internet_gateway" "DBigw" {
@@ -105,6 +109,8 @@ resource "aws_route_table" "PublicRouteTable" {
 resource "aws_route_table_association" "PublicRouteTableAssoc" {
 
   count          = 2
+  #Count is used to create two route tables for public subnets
+  #The count.index is used to create two route tables for public subnets
   subnet_id      = [aws_subnet.PublicSubnet1.id, aws_subnet.PublicSubnet2.id][count.index]
   route_table_id = aws_route_table.PublicRouteTable.id
 
@@ -119,6 +125,8 @@ resource "aws_route_table" "PrivateRouteTable" {
 resource "aws_route_table_association" "PrivateRouteTableAssoc" {
 
   count          = 2
+  #Count is used to create two route tables for private subnets
+  #The count.index is used to create two route tables for private subnets
   subnet_id      = [aws_subnet.PrivateSubnet1.id, aws_subnet.PrivateSubnet2.id][count.index]
   route_table_id = aws_route_table.PrivateRouteTable.id
 
